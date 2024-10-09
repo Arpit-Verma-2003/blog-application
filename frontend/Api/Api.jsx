@@ -1,10 +1,31 @@
 import axios from "axios";
-const apiUrl = "http://localhost:3000";
+const apiUrl = "http://localhost:3001" + "/api";
+axios.defaults.withCredentials = true;
 export const getBlogs = (cat = 'all', page = 1, limit = 9,searchQuery = '') => {
   return axios
     .get(apiUrl + `/blogs/${cat}?page=${page}&limit=${limit}&search=${searchQuery}`)
     .then(result => result.data)
     .catch(err => err);
+};
+
+const handleLogin = async () => {
+  const response = await fetch('/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password })
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    localStorage.setItem('token', data.token); // Store token in local storage
+    // Redirect or update state as necessary
+  } else {
+    // Handle login error
+    const errorData = await response.json(); // Retrieve the error message
+    alert(errorData.message || 'Login failed');
+  }
 };
 
 export const checkLogin = () => {
@@ -39,7 +60,7 @@ export const addCategory = async (categoryName) => {
 };
 
 export const updateUserRole = async (userId, newRoleId) => {
-  await axios.put(`${apiUrl}/users/${userId}/role`, { newRoleId });
+  await axios.put(`${apiUrl}/users/${userId}`, { newRoleId });
 };
 
 export const deleteSelectedUser = async(userId)=>{
@@ -71,7 +92,7 @@ export const createRole = async (newRole) => {
     return response.data;
   } catch (err) {
     console.error('Error creating role:', err);
-    throw err;  // Re-throw to handle error in handleSubmit
+    throw err; 
   }
 };
 
@@ -85,6 +106,16 @@ export const getPermissions = async ()=>{
     console.error('Error fetching permissions:', err);
   }
 }
+
+export const getPermissionsByRole = async (roleId) => {
+  try {
+    const result = await axios.post(`${apiUrl}/permissions`, { roleId });
+    return result.data;
+  } catch (err) {
+    console.error('Error fetching permissions:', err);
+    throw err; 
+  }
+};
 
 export const checkAdmin = () =>{
   return axios.get(apiUrl+"/checkAdmin")
@@ -119,11 +150,12 @@ export const getUserId = async()=>{
   }
 }
 
-export const deleteComment = async (commentId, userId) => {
+export const deleteComment = async (commentId, userId,roleId) => {
   try {
     const response = await axios.delete(`${apiUrl}/comments/${commentId}`, {
       data: { user_id: userId,
-        comment_id:commentId
+        comment_id:commentId,
+        role_id:roleId
        }
     });
     return response;
@@ -144,7 +176,7 @@ export const getCommentsByBlogId = async(blogId)=>{
 
 export const deleteBlog = async (blogId) => {
   try {
-    const response = await axios.delete(`${apiUrl}/api/blogs/${blogId}`,{
+    const response = await axios.delete(`${apiUrl}/blogs/${blogId}`,{
       withCredentials: true,
     });
     return response.data;
@@ -154,9 +186,9 @@ export const deleteBlog = async (blogId) => {
   }
 };
 
-export const getBlogsByAuthor = (search = '') => {
+export const getBlogsByAuthor = (search = '',uid) => {
   return axios
-    .get(apiUrl + `/author/blogs?search=${search}`)
+    .get(apiUrl + `/author/blogs?search=${search}&uid=${uid}`)
     .then(result => {
       return result.data;
     })

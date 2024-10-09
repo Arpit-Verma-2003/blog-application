@@ -17,6 +17,7 @@ const Allusers = () => {
             setLoading(true);
             const usersData = await getUsers();
             const rolesData = await getRoles();
+            console.log(usersData);
             setUsers(usersData);
             setRoles(rolesData);
             setLoading(false);
@@ -96,7 +97,7 @@ const Allusers = () => {
                 {users.map((user) => (
                   <tr key={user.id}>
                     <td className="px-6 py-4">{user.username}</td>
-                    <td className="px-6 py-4">{user.role_name}</td>
+                    <td className="px-6 py-4">{user.role.role_name}</td>
                     <td className="px-6 py-4">
                       <select
                         value={selectedRoles[user.id] || user.role_id}

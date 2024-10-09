@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 const Blogcard = ({blogData,handleDelete, showDelete,showEdit,handleEdit}) => {
-  const apiUrl = "http://localhost:3000/";
+  const apiUrl = "http://localhost:3001/";
   const truncateTitle = (title) =>{
     return title.length > 30 ? title.substring(0,30) + "...":title;
   }

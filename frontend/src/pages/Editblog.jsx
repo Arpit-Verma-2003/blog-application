@@ -31,7 +31,7 @@ const Editblog = () => {
                 setCategories(fetchedCategories.data);
             }
             const blog = await getBlogById(id); 
-            const blogPrevData = blog.data[0];
+            const blogPrevData = blog.data;
             if (blogPrevData) {
                 setBlogData({
                     title: blogPrevData.title,

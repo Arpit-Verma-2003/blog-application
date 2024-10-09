@@ -49,7 +49,7 @@ const Myblogs = () => {
     useEffect(()=>{
         async function fetchData() {
           setLoading(true);
-          const allBlogs = await getBlogsByAuthor(searchQuery);
+          const allBlogs = await getBlogsByAuthor(searchQuery,loginVar.uid);
           setLoading(false);
           if(!allBlogs.valid){
             navigate('/login');

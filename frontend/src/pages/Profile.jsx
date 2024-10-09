@@ -14,18 +14,17 @@ const Profile = () => {
         window.scrollTo(0, 0);
         const fetchData = async () => {
           setLoading(true);
-          const response = await checkLogin();
-          if (!response.valid) {
+          if (!loginVar.login) {
             setName("Guest");
             setUserRole("Viewer");
             setContent("Hence, You can only View blogs and don't have other permissions");
           } else {
-            setPermissions(response.permissions);
-            setName(response.username);
-            if(response.role==1){
+            setPermissions(loginVar.cpermissions);
+            setName(loginVar.userName);
+            if(loginVar.roleId==1){
                 setUserRole("Admin");
                 setContent("Hence, You have all the permissions in this website");
-            }else if(response.role==2){
+            }else if(loginVar.roleId==2){
                 setUserRole("Author");
                 setContent("Hence, You can Access, Create or Delete your own Blogs");
             }else{

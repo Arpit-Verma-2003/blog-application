@@ -47,7 +47,7 @@ const Createrole = () => {
             setSelectedPermissions([]);
           } catch (err) {
             console.error('Error creating role:', err);
-            Swal.fire({text:'Failed to create role',
+            Swal.fire({text:err,
               icon: 'warning'
             });
           }

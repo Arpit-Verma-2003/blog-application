@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../context/LoginC';
-const apiUrl = "http://localhost:3000";
+const apiUrl = "http://localhost:3001/api";
 const Register = () => {
     const [formData, setFormData] = useState({
         username: "",
@@ -64,7 +64,7 @@ const Register = () => {
     }
 
         try {
-            const res = await axios.post(`${apiUrl}/api/register`, formData);
+            const res = await axios.post(`${apiUrl}/register`, formData);
             setSuccess("The User is Successfully Registered!");
             setFormData({
                 username: "",

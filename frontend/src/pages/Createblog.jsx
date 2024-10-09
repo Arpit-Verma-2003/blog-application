@@ -52,7 +52,6 @@ const Createblog = () => {
     }
 
     const handleSubmit = async () => {
-        const checkLogined = await checkLogin();
         if (!image) {
             Swal.fire({ text: "Please Upload An Image", icon: 'warning' });
             return;
@@ -66,7 +65,7 @@ const Createblog = () => {
             Swal.fire({ text: "Image Upload Failed", icon: 'warning' });
             return;
         }
-        const blogWithAuthor = { ...newblog, author: checkLogined.username, image: uploadFile.path };
+        const blogWithAuthor = { ...newblog, author: details.userName, image: uploadFile.path,author_id:details.uid };
         if (!blogWithAuthor.title) {
             Swal.fire({ text: "Please Enter The Title", icon: 'warning' });
             return;
@@ -90,8 +89,9 @@ const Createblog = () => {
         
         setLoading(true); // Start loading before posting the blog
         let createdBlog = await postBlogs(blogWithAuthor);
+        console.log(createdBlog);
         setLoading(false); // Stop loading after posting
-        if (createdBlog.data === 1) {
+        if (createdBlog.data) {
             setNewblog(blankBlog);
             Swal.fire("New Blog Added Successfully");
             navigate('/');

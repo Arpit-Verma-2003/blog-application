@@ -15,17 +15,16 @@ const Blog = () => {
   const details = useContext(LoginContext);
   const [permissions,setPermissions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const apiUrl = "http://localhost:3000/";
+  const apiUrl = "http://localhost:3001/";
   useEffect(()=>{
     window.scrollTo(0, 0);
     async function fetchData() {
       const allBlogs = await getBlogById(id);
-      setBlog(allBlogs.data[0]);
+      setLoading(false);
+      setBlog(allBlogs.data);
       const commentsData = await getCommentsByBlogId(id);
       setComments(commentsData.data);
-      const uid = await getUserId();
-      setUserId(uid.userId);
-      setLoading(false);
+      setUserId(details.uid);
     }
     fetchData();
   },[]);
@@ -63,7 +62,7 @@ const Blog = () => {
   });
     if ((await confirmedDelete).isConfirmed) {
       try {
-        await deleteComment(commentId, userId);
+        await deleteComment(commentId, userId,details.roleId);
         Swal.fire("Comment Deleted Successfully");
         const commentsData = await getCommentsByBlogId(id);
         setComments(commentsData.data);
@@ -104,7 +103,7 @@ const Blog = () => {
                 {comments.map((comment, i) => (
                   <li key={i} className='p-4 bg-white border border-gray-300 rounded-lg'>
                     <p className='text-sm text-gray-600'>
-                      <strong className='text-gray-800'>{comment.username}</strong>: {comment.content}
+                      <strong className='text-gray-800'>{comment.user.username}</strong>: {comment.content}
                     </p>
                     <p className='text-xs text-gray-500 mt-2'>{new Date(comment.created_at).toLocaleString()}</p>
                     {(userId == comment.user_id || hasPermission('Delete Any Comment')) && (
